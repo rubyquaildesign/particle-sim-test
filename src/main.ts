@@ -1,4 +1,8 @@
 import regl from 'regl';
+import createCam from 'orbit-camera';
+import prclVert from './shaders/prcl.vert';
+console.log(createCam);
+
 const rawShade = import.meta.glob('./shaders/*', { eager: true, as: 'raw' });
 
 const shaders = Object.fromEntries(
@@ -79,6 +83,7 @@ const updateParticles = gl({
   vert: shaders['prcl_process.vert'],
   frag: shaders['prcl_process.frag'],
 });
+const cameraArray = new Float32Array(16);
 const drawToScreen = gl({
   attributes: {
     aIndex: particleIndexBuffer,
@@ -89,8 +94,9 @@ const drawToScreen = gl({
     uColorTex: particleColourTexture,
     uPhysTex: (_, p: any) => physicsSet[p.set][0],
     uParticleRadius: PARTICLE_BUFFER_RADIUS,
+    uCamMat: (_, p) => p.view ?? cameraArray,
   },
-  vert: shaders['prcl.vert'],
+  vert: prclVert,
   frag: shaders['prcl.frag'],
   blend: {
     enable: true,
@@ -106,15 +112,29 @@ const drawToScreen = gl({
     },
     color: [0, 0, 0, 0],
   },
+  depth: {
+    enable: true,
+  },
 });
 
 drawToScreen({ set: 0 });
 let set = 0;
+let fc = 0;
 const render = () => {
+  const camera = createCam(
+    [0, 1 - Math.cos(fc / 1000), Math.sin(fc / 1000)],
+    [0, 0, 0],
+    [0, -1, 0],
+  );
+  camera.zoom(-10);
+  camera.zoom(-10);
+  const view = camera.view(cameraArray);
   gl.clear({ color: [0 / 255, 18 / 255, 70 / 255, 1] });
+
   updateParticles({ set });
-  drawToScreen({ set });
+  drawToScreen({ set, view });
   set = (set + 1) % 2;
   requestAnimationFrame(render);
+  fc++;
 };
 render();

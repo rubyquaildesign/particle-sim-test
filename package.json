@@ -24,6 +24,9 @@
   },
   "prettier": "eslint-config-standard-typescript-prettier/prettier",
   "dependencies": {
-    "regl": "^2.1.0"
+    "glsl-noise": "^0.0.0",
+    "orbit-camera": "^1.0.0",
+    "regl": "^2.1.0",
+    "vite-plugin-glslify": "^2.0.1"
   }
 }
