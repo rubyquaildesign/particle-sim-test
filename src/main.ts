@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-ignore
 import regl from 'regl';
 import createCam from 'orbit-camera';
-import prclVert from './shaders/prcl.vert?raw';
+import prclVert from './shaders/prcl.vert';
 console.log(createCam);
 
 const rawShade = import.meta.glob('./shaders/*', { eager: true, as: 'raw' });
