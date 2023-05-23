@@ -18,7 +18,7 @@ const gl = regl({
   attributes: { alpha: true, depth: true, premultipliedAlpha: false },
 });
 gl.clear({ color: [0 / 255, 18 / 255, 70 / 255, 1] });
-const PARTICLE_BUFFER_RADIUS = 512;
+const PARTICLE_BUFFER_RADIUS = 64;
 const particleCount = PARTICLE_BUFFER_RADIUS ** 2;
 const particleIndexBuffer = gl.buffer({
   length: particleCount,
@@ -37,16 +37,16 @@ const particleColourTexture = gl.texture({
 });
 const physData = new Float32Array(particleCount * 4);
 for (let i = 0; i < physData.length; i += 4) {
-  const x = Math.random();
-  const y = Math.random();
-  const vx = x - 0.5;
-  const vy = y - 0.5;
-  const rotateAmount = Math.PI / 5;
-  const ang = Math.PI + (-rotateAmount + rotateAmount * Math.random());
-  const nvx = Math.cos(ang) * vx - Math.sin(ang) * vy;
-  const nvy = Math.sin(ang) * vx + Math.cos(ang) * vy;
-  const strength = Math.random() * 5;
-  physData.set([x, y, nvx * strength, nvy * strength], i);
+  const theta = Math.random() * Math.PI * 2;
+  const r = 0.5 + Math.sqrt(Math.random()) / 2;
+  const x = Math.cos(theta) * r;
+  const y = Math.sin(theta) * r;
+  const v = Math.sqrt(r) * 1;
+  const theta2 = theta + Math.PI / 2;
+  const nx = x / 2 + 0.5;
+  const ny = y / 2 + 0.5;
+
+  physData.set([nx, ny, Math.cos(theta2) * v, Math.sin(theta2) * v], i);
 }
 const physicsSet = [0, 0].map(() => {
   const particlePhysTexture = gl.texture({
@@ -66,15 +66,10 @@ const physicsSet = [0, 0].map(() => {
 });
 const updateParticles = gl({
   attributes: {
-    aPos: [
-      [-1, 1],
-      [1, 1],
-      [-1, -1],
-      [1, -1],
-    ],
+    aIndex: particleIndexBuffer,
   },
-  count: 4,
-  primitive: 'triangle strip',
+  count: particleCount,
+  primitive: 'points',
   uniforms: {
     uColorTex: particleColourTexture,
     uPhysTex: (_, p: any) => physicsSet[(p.set + 1) % 2][1],

@@ -1,7 +1,7 @@
 /* Main function, uniforms & utils */
 precision mediump float;
 
-attribute vec2 aPos;
+attribute float aIndex;
 
 uniform sampler2D uPhysTex;
 uniform float uParticleRadius;
@@ -13,8 +13,10 @@ varying vec2 vUV;
 #define TWO_PI 6.283185307179586
 
 void main(){
-  gl_Position=vec4(aPos,0.,1.);
-  float vUVx=(1.+aPos.x)/2.;
-  float vUVy=1.-((1.+aPos.y)/2.);
-  vUV=vec2(vUVx,vUVy);
+  float xPosition=(.5+mod(aIndex,uParticleRadius))/uParticleRadius;
+  float yPosition=(.5+floor(aIndex/uParticleRadius))/uParticleRadius;
+  vec2 screenPos=vec2(-1.+(xPosition*2.),1.-(yPosition*2.));
+  gl_Position=vec4(screenPos,0.,1.);
+  gl_PointSize=1.;
+  vUV=vec2(xPosition,yPosition);
 }

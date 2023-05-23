@@ -25,7 +25,7 @@ void main(){
     vec4 particlePhysData=texture2D(uPhysTex,vec2(x,y));
     vPos=vec2(x,y);
     vec2 form=clamp(particlePhysData.xy,vec2(-1.),vec2(1.));
-    gl_PointSize=16.;
+    gl_PointSize=32.;
     gl_Position=vec4(transformCoord(form),0.,1.);
     
 }

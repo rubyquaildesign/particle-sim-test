@@ -15,7 +15,9 @@ void main(){
   float fragDist=distance(vec2(.5,.5),gl_PointCoord);
   
   float alpha=mix(1.,0.,fragDist*2.);
-  
-  gl_FragColor=vec4(vec3(.8)+pointColor.xyz*vec3(.2),alpha);
+  if(alpha<.1){
+    discard;
+  }
+  gl_FragColor=vec4(vec3(.8)+vec3(.5)*vec3(.2),1.);
   
 }
