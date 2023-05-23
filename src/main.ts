@@ -1,6 +1,6 @@
 import regl from 'regl';
 import createCam from 'orbit-camera';
-import prclVert from './shaders/prcl.vert';
+import prclVert from './shaders/prcl.vert?raw';
 console.log(createCam);
 
 const rawShade = import.meta.glob('./shaders/*', { eager: true, as: 'raw' });
