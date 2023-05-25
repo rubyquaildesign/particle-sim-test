@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/d3-force": "^3.0.4",
     "eslint-config-standard-typescript-prettier": "^6.0.0",
     "eslint-config-standard-with-typescript": "^34.0.1",
     "typescript": "^5.0.2",
@@ -24,6 +25,7 @@
   },
   "prettier": "eslint-config-standard-typescript-prettier/prettier",
   "dependencies": {
+    "d3-force": "^3.0.0",
     "glsl-noise": "^0.0.0",
     "orbit-camera": "^1.0.0",
     "regl": "^2.1.0",

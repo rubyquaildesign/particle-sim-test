@@ -10,6 +10,7 @@ uniform float uParticleRadius;
 uniform mat4 uCamMat;
 varying vec2 vPos;
 varying float dist;
+varying float hei;
 #define PI_TWO 1.570796326794897
 #define PI 3.141592653589793
 #define TWO_PI 6.283185307179586
@@ -31,5 +32,6 @@ void main() {
     gl_PointSize = 32.;
     vec4 pos = vec4(transformCoord(form), 0.1 - .2 * z, 1.) * uCamMat;
     dist = pos.z;
+    hei = z;
     gl_Position = pos;
 }

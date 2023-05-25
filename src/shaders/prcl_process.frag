@@ -1,6 +1,6 @@
 /* Main function, uniforms & utils */
 precision mediump float;
-
+#pragma glslify: snoise = require(glsl-noise/simplex/2d) 
 uniform sampler2D uPhysTex;
 uniform float uParticleRadius;
 
@@ -14,8 +14,8 @@ void main() {
   vec4 pastData = texture2D(uPhysTex, vUV);
   vec2 pos = pastData.xy;
   vec2 vel = pastData.zw;
-  vec2 newPos = pos + (vel / 2000.);
-  ;
+  float n = snoise(vec2(distance(pos, vec2(.5, .5)), pos.y) * 6.) * 0.1;
+  vec2 newPos = pos + ((vel * (1. - n)) / 2000.);
   float dist = distance(newPos, vec2(.5, .5));
   vec2 v = vec2(.5, .5) - newPos;
   float force = 1. / (pow(dist, 2.) * 4096.);

@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-ignore
 import regl from 'regl';
 import createCam from 'orbit-camera';
-import prclVert from './shaders/prcl.vert';
 console.log(createCam);
 
-const rawShade = import.meta.glob('./shaders/*', { eager: true, as: 'raw' });
+const rawShade = import.meta.glob('./shaders/*', { eager: true });
+for (const key in rawShade) {
+  const s = (rawShade[key] as any).default;
+  rawShade[key] = s;
+}
 
 const shaders = Object.fromEntries(
   Object.entries(rawShade).map(([rk, txt]) => {
@@ -98,7 +99,7 @@ const drawToScreen = gl({
     uParticleRadius: PARTICLE_BUFFER_RADIUS,
     uCamMat: (_, p) => p.view ?? cameraArray,
   },
-  vert: prclVert,
+  vert: shaders['prcl.vert'],
   frag: shaders['prcl.frag'],
   blend: {
     enable: true,
@@ -124,9 +125,9 @@ let set = 0;
 let fc = 0;
 const render = () => {
   const camera = createCam(
-    [0, 1 - Math.cos(fc / 1000), Math.sin(fc / 1000)],
+    [0, -1 * 9, (-1 + Math.sin(fc / 100) * 0.9) * 9],
     [0, 0, 0],
-    [0, -1, 0],
+    [0, -10, 0],
   );
   camera.zoom(-10);
   camera.zoom(-10);

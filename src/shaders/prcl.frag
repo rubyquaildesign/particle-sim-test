@@ -5,6 +5,7 @@ uniform float uParticleRadius;
 
 varying vec2 vPos;
 varying float dist;
+varying float hei;
 #define PI_TWO 1.570796326794897
 #define PI 3.141592653589793
 #define TWO_PI 6.283185307179586
@@ -12,12 +13,12 @@ varying float dist;
 void main() {
   vec3 pointColor = texture2D(uColorTex, vPos).rgb;
   float fragDist = distance(vec2(.5, .5), gl_PointCoord);
-  float slightDist = ((1. + dist) / 2.) * 0.5;
+  float slightDist = ((1. + dist) / 2.) * 1.;
 
   float alpha = mix(1., 0., (fragDist * 2.) + slightDist);
   if(alpha < .1) {
     discard;
   }
-  gl_FragColor = vec4(vec3(.8 - slightDist), 1.);
+  gl_FragColor = vec4(vec3(.8 - (hei * 0.2)), 1.);
 
 }
